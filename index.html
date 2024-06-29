@@ -5,18 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
     <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/index.js">
 </head>
 <body>
-    <h1>Hello World</h1>
-    <hr>
-    <img src="/img/01.jpg" width="450px">
-    <h4>Panuwat Thammabut</h4>
-    <h4>653450099-8</h4>
-    <p>Computer and Imformation science</p>
-    <b>facebook : </b>
-    <a href="https://www.facebook.com/" target="_blank">นุ ภานุวัฒน์</a>
-    <br>
-    <img src="">
-    <h4>Go Go Go</h4>
+<header>
+    <div class="container">
+        <img src="/img/01.jpg" width="450px">
+        <div class="header-info">
+            <h4>Panuwat Thammabut</h4>
+            <h4>653450099-8</h4>
+            <p>Computer and Information science</p>
+            <b>facebook : </b>
+            <a href="https://www.facebook.com/profile.php?id=100005399355607" target="_blank">นุ ภานุวัฒน์</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="github-repos">
+        <center><h2>Repositories from GitHub</h2></center>
+        <table id="repo-table">
+            <tbody id="repo-list"></tbody>
+        </table>
+    </section>
+</main>
+    <script>
+        const username = 'Vandaler';
+            const reposCount = 6;
+            const apiUrl = `https://api.github.com/users/${username}/repos?sort=stars&per_page=${reposCount}`;
+
+            fetch(apiUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                    const repoList = document.getElementById('repo-list');
+                    let row;
+                    data.forEach((repo, index) => {
+                        if (index % 2 === 0) {
+                            row = document.createElement('tr');
+                            repoList.appendChild(row);
+                        }
+                        const repoCell = document.createElement('td');
+                        const repoLink = document.createElement('a');
+                        repoLink.href = repo.html_url;
+                        repoLink.textContent = repo.name;
+                        repoLink.className = 'repo-link';
+                        repoCell.appendChild(repoLink);
+                        row.appendChild(repoCell);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error fecthing repositories', error);
+                });
+    </script>
 </body>
 </html>
