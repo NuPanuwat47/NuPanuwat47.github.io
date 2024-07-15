@@ -26,17 +26,43 @@
                             const { sprites, name ,abilities , stats , types} = pokemonData;
                             console.log(pokemonData)
                             const imageUrl = sprites.front_default;
-                            const skill = abilities[0].ability.name;
+                            
                             ele.innerHTML += `<br><img src='${imageUrl}' width='40%'>`
-                            +`<h1 id="pokename">`+`${name}` +`</h1>`
-                            +`<p>Pokemon Ability : </p>`
-                            +`<p>Pokemon Stats : </p>`
-                            +`<p>Pokemon Type : </p>`;
+                            +`<h1 id="pokename">`+`${name}` +`</h1>`;
+                            ele.innerHTML += `<p>Pokemon Ability :</p>
+                            <ul>`;
+                            for (const skill of abilities) {
+                                ele.innerHTML += `<li>${skill.ability.name}`
+                            }
+                            ele.innerHTML += `</u>
+                            <p>Pokemon Stats:</p>
+                            <ul>`;
+
+                            for (const stat of stats) {
+                                ele.innerHTML += `<li>${stat.stat.name}: ${stat.base_stat}</li>`; // Add stat name and value
+                            }
+
+                            ele.innerHTML += `</ul>
+                            <p>Pokemon Types:</p>
+                            <ul>`;
+
+                            for (const type of types) {
+                                ele.innerHTML += `<li>${type.type.name}</li>`; // Add type name
+                            }
+
+                            ele.innerHTML += `</ul>`;
                         })
                         .catch(error => console.error("Error fetching data for Pokemon:", element.name, error));
                    
                 })
                 .catch(error => console.error("Error fetching Pokemon list:", error));
+                function skill() {
+                    let abilitiesHTML = '';
+                    for (let i = 0; i < abilities.length; i++) {
+                        abilitiesHTML += `<br><p>${abilities[i].name}</p>`
+                    };
+                    return abilitiesHTML;
+                }
     </script>
     
 </body>
