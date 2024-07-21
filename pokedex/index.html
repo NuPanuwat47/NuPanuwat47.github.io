@@ -11,16 +11,16 @@
 <body>
         <div class="container">
             <h1>Pokedex List</h1>
-            <div id="name" class="row">
+            <div id="pokemonContainer" class="row">
             </div>
         </div>
-        <center><button class="btnn">More Pokemon</button></center>
+        <center><button id="loadMoreBtn" class="btnn">More Pokemon</button></center>
     <script>
         fetch('https://pokeapi.co/api/v2/pokemon')
             .then((res) => res.json())
             .then((data) => {
                 const datas = data["results"];
-                const ele = document.getElementById('name');
+                const ele = document.getElementById('pokemonContainer');
                 datas.forEach(element => {
                     const pokemonId = element.url.split('/')[6];
                     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
@@ -29,7 +29,7 @@
                             const { sprites, name } = pokemonData;
                             const imageUrl = sprites.front_default;
 
-                            ele.innerHTML += `<div class='col-3'><a href ='details/index.html?id=${pokemonId}'><div class='card'>`
+                            ele.innerHTML += `<div class='col-6 col-md-3 col-lg-2 mb-4'><a href ='details/index.html?id=${pokemonId}'><div class='card'>`
                                 + `<img class='card-img-top' src='${imageUrl}'>`
                                 + `<div class='card-body'>${name}</div></div></div>`;
                         })
@@ -37,6 +37,42 @@
                 });
             })
             .catch(error => console.error("Error fetching Pokemon list:", error));
+        let offset = 0; 
+        const limit = 20; 
+
+        function fetchPokemons(offset, limit) {
+            fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    const pokemons = data.results;
+                    const ele = document.getElementById('pokemonContainer');
+                    pokemons.forEach((pokemon) => {
+                        const pokemonId = pokemon.url.split('/')[6];
+                        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
+                            .then(response => response.json())
+                            .then(pokemonData => {
+                                const { sprites, name } = pokemonData;
+                                const imageUrl = sprites.front_default;
+
+                                ele.innerHTML += `<div class='col-6 col-md-3 col-lg-2 mb-4'><a href ='details/index.html?id=${pokemonId}'><div class='card'>`
+                                    + `<img class='card-img-top' src='${imageUrl}'>`
+                                    + `<div class='card-body'>${name}</div></div></div>`;
+                            })
+                            .catch(error => console.error("Error fetching data for Pokemon:", pokemon.name, error));
+                    });
+                })
+                .catch(error => console.error("Error fetching Pokemon list:", error));
+        }
+
+        // โหลด Pokemon เมื่อหน้าเว็บโหลดเสร็จ
+        fetchPokemons(offset, limit);
+
+        window.addEventListener('click', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                offset += limit;
+                fetchPokemons(offset, limit);
+            }
+        });
     </script>
 
 </body>

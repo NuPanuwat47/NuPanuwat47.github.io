@@ -6,64 +6,75 @@
     <title>Info</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 22px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    
+        #name {
+            margin-bottom: -50px;
+            font-size: 50px;
+            font-weight: bold;
+        }
+    
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+    
+        ul li {
+            margin-bottom: 10px;
+        }
+    
+        button {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1 id="name">Pokedex Lab</h1>
+        <div id="pokemonDetails"></div>
+        <button onclick="goBack()" class="btn btn-primary">Back to Pokedex</button>
     </div>
     <script>
         const urlParameter = new URLSearchParams(window.location.search)
         const id = urlParameter.get('id');
         console.log(id)
-        fetch('https://pokeapi.co/api/v2/pokemon')
-                .then((res) => res.json())
-                .then((data) => {
-                    const datas = data["results"];
-                    const ele = document.getElementById('name');
-                    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-                        .then(response => response.json())
-                        .then(pokemonData => {
-                            const { sprites, name ,abilities , stats , types} = pokemonData;
-                            console.log(pokemonData)
-                            const imageUrl = sprites.front_default;
-                            
-                            ele.innerHTML += `<br><img src='${imageUrl}' width='40%'>`
-                            +`<h1 id="pokename">`+`${name}` +`</h1>`;
-                            ele.innerHTML += `<p>Pokemon Ability :</p>
-                            <ul>`;
-                            for (const skill of abilities) {
-                                ele.innerHTML += `<li>${skill.ability.name}`
-                            }
-                            ele.innerHTML += `</u>
-                            <p>Pokemon Stats:</p>
-                            <ul>`;
+        fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+                .then(response => response.json())
+                .then(pokemonData => {
+                    const { sprites, name, height, weight, types, stats, abilities } = pokemonData;
+                    const imageUrl = sprites.front_default;
 
-                            for (const stat of stats) {
-                                ele.innerHTML += `<li>${stat.stat.name}: ${stat.base_stat}</li>`; // Add stat name and value
-                            }
-
-                            ele.innerHTML += `</ul>
-                            <p>Pokemon Types:</p>
-                            <ul>`;
-
-                            for (const type of types) {
-                                ele.innerHTML += `<li>${type.type.name}</li>`; // Add type name
-                            }
-
-                            ele.innerHTML += `</ul>`;
-                        })
-                        .catch(error => console.error("Error fetching data for Pokemon:", element.name, error));
-                   
+                    document.getElementById('name').innerHTML = name;
+                    document.getElementById('pokemonDetails').innerHTML = `
+                <br><img src='${imageUrl}' width='40%'>
+                <p>Height: ${height} dm</p>
+                <p>Weight: ${weight} hg</p>
+                <p>Pokemon Types:</p>
+                <ul>
+                    ${types.map(type => `<li><a href="type.html?type=${type.type.name}">${type.type.name}</a></li>`).join('')}
+                </ul>
+                <p>Pokemon Stats:</p>
+                <ul>
+                    ${stats.map(stat => `<li>${stat.stat.name}: ${stat.base_stat}</li>`).join('')}
+                </ul>
+                <p>Pokemon Abilities:</p>
+                <ul>
+                    ${abilities.map(ability => `<li><a href="ability.html?ability=${ability.ability.name}">${ability.ability.name}</a></li>`).join('')}
+                </ul>
+            `;
                 })
-                .catch(error => console.error("Error fetching Pokemon list:", error));
-                function skill() {
-                    let abilitiesHTML = '';
-                    for (let i = 0; i < abilities.length; i++) {
-                        abilitiesHTML += `<br><p>${abilities[i].name}</p>`
-                    };
-                    return abilitiesHTML;
-                }
-    </script>
+                .catch(error => console.error("Error fetching data for Pokemon:", error));
+
+            function goBack() {
+                window.history.back();
+            }
+        </script>
     
 </body>
 </html>
