@@ -9,23 +9,42 @@ document.getElementById('weatherForm').addEventListener('submit', function(event
         .then(data => {
             if (data.cod === "200") {
                 const forecast = data.list;
-                let forecastHTML = '';
-
-                forecast.forEach((item) => {
-                    const dateTime = new Date(item.dt * 1000);
-                    const temperature = item.main.temp;
-                    const humidity = item.main.humidity;
-                    const windSpeed = item.wind.speed;
-
-                    forecastHTML += `
-                        <div>
-                            <h3>${dateTime.toLocaleString()}</h3>
-                            <p>Temperature: ${temperature}°C</p>
-                            <p>Humidity: ${humidity}%</p>
-                            <p>Wind Speed: ${windSpeed} m/s</p>
-                        </div>
-                    `;
+                const todayDate = new Date().toISOString().split('T')[0];
+                
+                const todayForecast = forecast.filter(item => {
+                    const itemDate = new Date(item.dt * 1000).toISOString().split('T')[0];
+                    return itemDate === todayDate;
                 });
+
+                if (todayForecast.length === 0) {
+                    document.getElementById('forecast').innerHTML = '<p>No weather data available for today.</p>';
+                    return;
+                }
+
+                let temperatureSum = 0;
+                let humiditySum = 0;
+                let windSpeedSum = 0;
+                let count = 0;
+
+                todayForecast.forEach(item => {
+                    temperatureSum += item.main.temp;
+                    humiditySum += item.main.humidity;
+                    windSpeedSum += item.wind.speed;
+                    count++;
+                });
+
+                const averageTemperature = (temperatureSum / count).toFixed(1);
+                const averageHumidity = (humiditySum / count).toFixed(1);
+                const averageWindSpeed = (windSpeedSum / count).toFixed(1);
+
+                const forecastHTML = `
+                    <div>
+                        <h3>Today's Weather in ${city}</h3>
+                        <p>Temperature: ${averageTemperature}°C</p>
+                        <p>Humidity: ${averageHumidity}%</p>
+                        <p>Wind Speed: ${averageWindSpeed} m/s</p>
+                    </div>
+                `;
 
                 document.getElementById('forecast').innerHTML = forecastHTML;
             } else {
