@@ -8,15 +8,13 @@
      
     <style>
         * {
-        margin: 0;
-        padding: 0;
         box-sizing: border-box;
     }
 
     body {
         font-family: Arial, sans-serif;
-        background-color: #ffffff;
-        padding: 20px;
+        background-color: #d8d8d8;
+        align-items: center;
     }
 
     .container {
@@ -48,26 +46,22 @@
         font-size: 24px;
         margin-bottom: 5px;
         color: #24292e;
-        /* Dark text color */
     }
 
     .header-info p {
         font-size: 16px;
         color: #586069;
-        /* Medium text color */
         margin-bottom: 5px;
     }
 
     .header-info b {
         font-weight: bold;
         color: #24292e;
-        /* Dark text color */
     }
 
     .header-info a {
         text-decoration: none;
         color: #0366d6;
-        /* Blue link color */
     }
 
     .header-info a:hover {
@@ -82,32 +76,33 @@
         font-size: 20px;
         margin-bottom: 10px;
         color: #24292e;
-        /* GitHub text color */
     }
 
     #repo-table {
-        width: 15%;
-        border-collapse: collapse;
         align-items: center;
+        justify-content: center;
         display: flex;
     }
 
     #repo-table td {
         padding: 1px -5px 10px 0px;
-        border: 1px solid #daff89;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
     }
 
     .repo-link {
         display: flex;
-        padding: 10px;
-        background-color: #4d4d4d;
-        color: #fff;
+        padding: 15px;
+        background-color: #dbffbe;
+        color: #000000;
         text-decoration: none;
         border-radius: 5px;
+        font-weight: bold;
     }
 
     .repo-link:hover {
-        background-color: #000000;
+        background-color: #92ffc8;
     }
 
     .btn {
@@ -115,6 +110,9 @@
         padding: 10px 15px 10px 15px;
         border-radius: 15px;
         background-color: #beffd4;
+    }
+    footer {
+        margin: none;
     }
     </style>
 </head>
@@ -139,9 +137,9 @@
 <main>
     <section class="github-repos">
         <center><h2>Repositories from GitHub</h2></center>
-        <center><table id="repo-table">
+        <table id="repo-table">
             <tbody id="repo-list"></tbody>
-        </table></center>
+        </table>
     </section>
 </main>
     <script>
