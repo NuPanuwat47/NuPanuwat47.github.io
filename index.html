@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
-    <!-- <link rel="stylesheet" href="index.css"> -->
-     
     <style>
         * {
         box-sizing: border-box;
@@ -143,7 +141,7 @@
     </section>
 </main>
     <script>
-        const username = 'Vandaler';
+        const username = 'NuPanuwat47';
             const reposCount = 6;
             const apiUrl = `https://api.github.com/users/${username}/repos?sort=stars&per_page=${reposCount}`;
 
@@ -167,7 +165,7 @@
                     });
                 })
                 .catch((error) => {
-                    console.error('Error fecthing repositories', error);
+                    console.error('Error fecthing', error);
                 });
     </script>
     <script src="index.js"/>
